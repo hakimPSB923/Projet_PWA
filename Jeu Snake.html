@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            #game-board {
+                position: relative;
+                height: 400px;
+                width: 400px;
+                border: 1px solid black;
+            }
+            .dot {
+                position: absolute;
+                height: 20px;
+                width: 20px;
+                background-color: #000;
+            }
+            .apple {
+                position: absolute;
+                height: 20px;
+                width: 20px;
+                background-color: #f00;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="game-board"></div>
+        <script>
+            var snake = [{ top: 200, left: 200 }];
+            var apple = null;
+            var direction = 'right';
+
+            function updateSnake() {
+                const head = Object.assign({}, snake[0]); // copy head
+                if (direction === 'right') head.left += 20;
+                if (direction === 'left') head.left -= 20;
+                if (direction === 'up') head.top -= 20;
+                if (direction === 'down') head.top += 20;
+                snake.unshift(head); 
+
+                if (apple && apple.top === head.top && apple.left === head.left) { 
+                    document.getElementById('game-board').removeChild(apple.element);
+                    apple = null;
+                } else { 
+                    const tail = snake.pop(); 
+                    document.getElementById('game-board').removeChild(tail.element);
+                }
+            }
+
+            function updateApple() {
+                if (apple === null) {
+                    apple = { top: Math.floor(Math.random() * 20) * 20, left: Math.floor(Math.random() * 20) * 20 };
+                    apple.element = document.createElement('div');
+                    apple.element.className = 'apple';
+                    apple.element.style.top = apple.top + 'px';
+                    apple.element.style.left = apple.left + 'px';
+                    document.getElementById('game-board').appendChild(apple.element);
+                }
+            }
+
+            function drawSnake() {
+                snake.forEach(function(dot) {
+                    dot.element = document.createElement('div');
+                    dot.element.className = 'dot';
+                    dot.element.style.top = dot.top + 'px';
+                    dot.element.style.left = dot.left + 'px';
+                    document.getElementById('game-board').appendChild(dot.element);
+                });
+            }
+
+            setInterval(function() {
+                updateSnake();
+                updateApple();
+                drawSnake();
+            }, 200);
+
+            window.onkeydown = function(e) {
+                if (e.keyCode === 37) direction = 'left';
+                if (e.keyCode === 38) direction = 'up';
+                if (e.keyCode === 39) direction = 'right';
+                if (e.keyCode === 40) direction = 'down';
+            };
+        </script>
+    </body>
+</html>
