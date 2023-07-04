@@ -1,0 +1,19 @@
+		function envoiDATA () {
+			let formattedFormData={"user":"hakim","score":10,"temps":10.06} ;
+			fetch("/personnalisation/save_data.php", {
+			method: "POST",
+			mode: "same-origin",
+			credentials: "same-origin",
+			headers: {
+ 			"Content-Type": "application/json",
+ 			"charset":"utf-8"
+				},
+				body: JSON.stringify(formattedFormData)
+				})
+			.then((res) => res.json())
+			.then((data) => {
+				// faire le traitement de data
+ 				})
+			.catch((error) => console.log(error))
+			
+		}
