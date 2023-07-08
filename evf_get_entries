@@ -1,0 +1,18 @@
+<?php
+require('func_lib_inc.php');
+ecrire_log("evf_get_entries.php == recuperation de toutes les entrees" );
+function evf_get_all_entries() {
+ global $wpdb;
+ $table_name='wp_game_scores';
+ $data=$wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name"));
+ return $data;
+}
+$id=get_current_user_id();
+$login=wp_get_current_user();
+ecrire_log("evf_get_entries.php ==> ".$login->user_login);
+$Data=evf_get_all_entries();
+$comma_separated = json_encode($Data);
+ecrire_log("evf_get_entries.php ==> user:".$id." recuperation des objets".$comma_separated);
+echo json_encode(array("success"=>"yes","details"=> $Data));
+echo $specialities;
+?>
