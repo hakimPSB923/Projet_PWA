@@ -6,12 +6,14 @@ $current_user = wp_get_current_user();
 $max_score_result = $wpdb->get_var( $wpdb->prepare( "SELECT MAX(score) FROM wp_game_scores WHERE nickname = %s", $current_user->user_login ) );
 
 if ( $max_score_result ) {
-    $date_result = $wpdb->get_row( $wpdb->prepare( "SELECT game_date FROM wp_game_scores WHERE nickname = %s AND score = %d", $current_user->user_login, $max_score_result ) );
-    if ( $date_result ) {
-        $date_timestamp = strtotime($date_result->game_date);
+    $date_time_result = $wpdb->get_row( $wpdb->prepare( "SELECT game_date, TIME_TO_SEC(game_time) as game_time_sec FROM wp_game_scores WHERE nickname = %s AND score = %d", $current_user->user_login, $max_score_result ) );
+    if ( $date_time_result ) {
+        $date_timestamp = strtotime($date_time_result->game_date);
         $formatted_date = date('d-m-Y', $date_timestamp);
+        $minutes = intdiv($date_time_result->game_time_sec, 60);
+        $seconds = $date_time_result->game_time_sec % 60;
 
-        echo ' Vous avez effectué votre highscore le ' . $formatted_date . ' avec un score de ' . $max_score_result . '.';
+        echo ' Vous avez effectué votre highscore le ' . $formatted_date . ' avec un score de ' . $max_score_result . ' en ' . $minutes . ' minutes et ' . $seconds . ' secondes.';
     }
 }
 ?>
