@@ -1,0 +1,40 @@
+<?php
+require('../wp-load.php');
+define('WP_DEBUG', true);
+define('WP_DEBUG_DISPLAY', true);
+
+
+/* 
+Template Name: sauvegarde des messages directement dans les enregistrements de type message  
+*/
+// on recupere un envoi en format JSON 
+// ne pas oublier de securiser les recuperation des donnes et d eviter les injection sql 
+$data =json_decode(file_get_contents('php://input'), true);
+$user_id = $current_user->ID;
+$score=$data["score"];
+$temps=$data["temps"];
+//
+
+
+
+    $user = get_user_meta($user_id, 'nickname', true);
+    
+$today = date("Y-m-d H:i:s");
+
+function update($id,$user,$score,$temps) {
+        global $wpdb;
+        $user_mail = "email";
+        $today = date("Y-m-d H:i:s");
+// a rajouter dans le json l'auteur id 
+        $retour=$wpdb->query($wpdb->prepare("insert into wp_game_scores(id,nickname,user_mail,score,game_date,game_time) values(%s,%s,%s,%s,%s,%s)",array($id,$user,$user_mail,$score,$today,$temps) ));
+        //$retour=$wpdb->query($wpdb->prepare("insert into wp_game_scores(id,nickname,user_mail,score,game_date,game_time) values('1','HakimPSB','email',1755,'2023-07-07','0:50:00')"));
+}
+//if( is_user_logged_in() ) { // check if there is a logged in user
+$id=get_current_user_id();
+$Data=update($id,$user,$score,$temps);
+
+echo json_encode(array("success"=>"yes","details"=> "nice boy"));
+//} else {
+//echo json_encode(array("success"=>"yes","details"=> ""));
+//}
+?>
