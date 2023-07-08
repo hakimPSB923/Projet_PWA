@@ -1,0 +1,14 @@
+<?php
+// --------------------------------------------------------------
+// librairies des fonctions de base utilisees par les autres scripts
+// realisation : CNRS Y. stroppa
+// --------------------------------------------------------------
+require('../wp-load.php');
+function ecrire_log($errtxt) {
+ $fp = fopen('log.txt', 'a+');
+ fseek($fp, SEEK_END);
+ $nouverr = $errtxt . "\r\n";
+ fputs($fp, $nouverr);
+ fclose($fp);
+}
+?>
