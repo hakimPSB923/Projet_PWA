@@ -1,5 +1,6 @@
-		function envoiDATA () {
-			let formattedFormData={"user":"hakim","score":10,"temps":10.06} ;
+		function envoiDATA (score, temps) {
+			let formattedFormData={"score": score, "temps": temps} ;
+			console.log("Before fetch in envoiDATA");
 			fetch("/personnalisation/save_data.php", {
 			method: "POST",
 			mode: "same-origin",
@@ -13,7 +14,9 @@
 			.then((res) => res.json())
 			.then((data) => {
 				// faire le traitement de data
+				console.log('reception fetch',data);
  				})
 			.catch((error) => console.log(error))
+			console.log("After fetch in envoiDATA");
 			
 		}
