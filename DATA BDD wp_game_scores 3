@@ -1,0 +1,11 @@
+<?php
+global $wpdb;
+
+$current_user = wp_get_current_user();
+
+$time_result = $wpdb->get_var( $wpdb->prepare( "SELECT SUM(TIME_TO_SEC(game_time)) FROM wp_game_scores WHERE nickname = %s", $current_user->user_login ) );
+if ( $time_result ) {
+    $total_minutes = floor($time_result / 60);
+    echo ' Vous avez passé ' . $total_minutes . ' minutes sur mon jeu. Merci à vous !!!!';
+}
+?>
